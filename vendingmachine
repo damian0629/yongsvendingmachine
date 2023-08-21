@@ -1,0 +1,99 @@
+using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        int product1 = 5;
+        int product2 = 6;
+        int product3 = 7;
+        int qty = 0;
+
+        // Menu  
+        Console.WriteLine("**********YONG's Vending Machine**********");
+        Console.WriteLine("");
+        Console.WriteLine("1) MILO (RM5)");
+        Console.WriteLine("2) COKE (RM6)");
+        Console.WriteLine("3) NESCAFE (RM7)");
+        Console.WriteLine("");
+        Console.WriteLine("PLEASE CHOOSE YOUR DRINK (1/2/3):");
+        string choice = Console.ReadLine();
+
+        switch (choice)
+        {
+            case "1":
+                Console.WriteLine("Quantity:");
+                qty = int.Parse(Console.ReadLine());
+                Console.WriteLine("Total is RM" + (product1 * qty));
+                break;
+            case "2":
+                Console.WriteLine("Quantity:");
+                qty = int.Parse(Console.ReadLine());
+                Console.WriteLine("Total is RM" + (product2 * qty));
+                break;
+            case "3":
+                Console.WriteLine("Quantity:");
+                qty = int.Parse(Console.ReadLine());
+                Console.WriteLine("Total is RM" + (product3 * qty));
+                break;
+            default:
+                Console.WriteLine("Invalid choice.");
+                break;
+        }
+
+        bool redirectToOnlineBanking = false;
+
+        while (!redirectToOnlineBanking)
+        {
+            Console.WriteLine("");
+            Console.WriteLine("Please pay by online banking");
+            Console.WriteLine("Please press 'y' to redirect");
+            string redirectChoice = Console.ReadLine();
+
+            if (redirectChoice == "y")
+            {
+                Console.WriteLine("Redirecting...");
+                OpenUrlInDefaultBrowser("http://www.google.com");
+                redirectToOnlineBanking = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid choice, please try again.");
+            }
+        }
+    }
+
+    static void OpenUrlInDefaultBrowser(string url)
+    {
+        try
+        {
+            // Different command based on the platform
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", url);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", url);
+            }
+            else
+            {
+                Console.WriteLine("Unsupported platform.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("An error occurred while opening the URL: " + ex.Message);
+        }
+    }
+}
